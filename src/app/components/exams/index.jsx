@@ -1,13 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "./css/styles.module.css";
 
 export default function AvailableExams() {
   const router = useRouter();
+  const [userData, setUserData] = useState({ name: '', email: '' });
   const [activeSection, setActiveSection] = useState("exam");
+
+  useEffect(() => {
+    // Get user data
+    try {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        setUserData(JSON.parse(userStr));
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
+  }, []);
 
   const menuItems = [
     { id: "home", label: "Home", dir: "/dashboard" },
@@ -50,16 +63,45 @@ export default function AvailableExams() {
 
       {/* Main Exam Content */}
       <main className={styles.mainContent}>
+        {/* Header */}
+        <header className={styles.header}>
+          <h1 className={styles.pageTitle}>Available Exams</h1>
+          
+          <div className={styles.userSection}>
+            <div className={styles.userProfile}>
+              <Image
+                src="/user.jpg"
+                alt="User avatar"
+                width={50}
+                height={50}
+                className={styles.avatar}
+              />
+              <div className={styles.userInfo}>
+                <span className={styles.userName}>{userData.name}</span>
+              </div>
+            </div>
+
+            <button 
+              className={styles.logoutBtn}
+              onClick={() => {
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('user');
+                router.push('/login');
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        </header>
+
         <div className={styles.container}>
           <div className={styles.headerSection}>
-            <h1>Available Exams</h1>
-       
-              Browse free online reviewers for Librarian Licensure Examination (LLE) Board Reviewers PH.
-     
+            <h1>Librarian Licensure Examination</h1>
+            <p>Browse free online reviewers for Librarian Licensure Examination (LLE) Board Reviewers PH.</p>
           </div>
 
           <div className={styles.examSection}>
-            <h2>Available Exams</h2>
+            <h2>Choose Your Exam</h2>
             <div className={styles.examGrid}>
               {exams.map((exam, index) => (
                 <div key={index} className={styles.card}>

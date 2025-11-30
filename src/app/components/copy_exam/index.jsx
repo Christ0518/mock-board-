@@ -1,13 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "./css/styles.module.css";
 
 export default function PartExam() {
   const router = useRouter();
+  const [userData, setUserData] = useState({ name: '', email: '' });
   const [activeSection, setActiveSection] = useState("part_exam");
+
+  useEffect(() => {
+    // Get user data
+    try {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        setUserData(JSON.parse(userStr));
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
+  }, []);
 
   const menuItems = [
     { id: "home", label: "Home", dir: "/dashboard" },
@@ -71,6 +84,37 @@ export default function PartExam() {
 
       {/* ---------------- MAIN CONTENT (rewritten) ---------------- */}
       <main className={styles.mainContent}>
+        {/* Header */}
+        <header className={styles.header}>
+          <h1 className={styles.headerTitle}>LLE Subjects</h1>
+          
+          <div className={styles.userSection}>
+            <div className={styles.userProfile}>
+              <Image
+                src="/user.jpg"
+                alt="User avatar"
+                width={50}
+                height={50}
+                className={styles.avatar}
+              />
+              <div className={styles.userInfo}>
+                <span className={styles.userName}>{userData.name}</span>
+              </div>
+            </div>
+
+            <button 
+              className={styles.logoutBtn}
+              onClick={() => {
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('user');
+                router.push('/login');
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        </header>
+
         <div className={styles.mainWrapper}>
           {/* Page Header */}
           <h1 className={styles.pageTitle}>Librarian Licensure Examination (LLE) Subjects</h1>

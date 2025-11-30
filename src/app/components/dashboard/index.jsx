@@ -129,7 +129,12 @@ export default function Dashboard() {
     <div className={styles.reviewerHub}>
       <h2>Your Ultimate Reviewer Hub</h2>
       <p>Where Future Librarians Turn Preparation into Success.</p>
-      <button className={styles.startBtn}>Start Reviewing Now</button>
+      <button 
+        className={styles.startBtn}
+        onClick={() => router.push('/exam')}
+      >
+        Start Reviewing Now
+      </button>
     </div>
   </div>
 </div>

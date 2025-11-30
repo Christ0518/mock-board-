@@ -10,6 +10,16 @@ export default function About() {
   const [activeSection, setActiveSection] = useState('about');
   
   useEffect(() => {
+    // Get user data
+    try {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        setUserData(JSON.parse(userStr));
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
+    
     // Set active section to 'about' when component mounts
     setActiveSection('about');
   }, []);
@@ -50,7 +60,37 @@ export default function About() {
         {/* Main Content */}
         <main className={styles.mainContent}>
           {/* Header */}
-          
+          <header className={styles.header}>
+            <div className={styles.logoContainer}>
+              {/* Optional: Add page title or logo here */}
+            </div>
+
+            <div className={styles.userSection}>
+              <div className={styles.userProfile}>
+                <Image
+                  src="/user.jpg"
+                  alt="User avatar"
+                  width={50}
+                  height={50}
+                  className={styles.avatar}
+                />
+                <div className={styles.userInfo}>
+                  <span className={styles.userName}>{userData.name}</span>
+                </div>
+              </div>
+
+              <button 
+                className={styles.logoutBtn}
+                onClick={() => {
+                  localStorage.removeItem('isAuthenticated');
+                  localStorage.removeItem('user');
+                  router.push('/login');
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          </header>
 
           {/* ABOUT PAGE CONTENT */}
           <div className={styles.content}>
