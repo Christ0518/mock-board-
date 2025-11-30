@@ -80,121 +80,125 @@ export default function ManageUsers() {
         </header>
 
         {/* MOCK BOARD EXAMINEES LIST */}
-        <div className={styles.content}>
-          <h2 className={styles.sectionTitle}>Manage Users</h2>
-          <p className={styles.breadcrumb}>User login history</p>
+       <div className={styles.content}>
 
-          {/* Search + Add Button */}
-          <div className={styles.topBar}>
-            <input
-              type="text"
-              placeholder="Search by name or exam"
-              className={styles.searchInput}
-            />
+  {/* Back Button */}
+  <button
+    className={styles.addBtn}
+    style={{ marginBottom: "15px", width: "120px" }}
+    onClick={() => router.push("/admin_page")}
+  >
+    ← Back
+  </button>
 
-            <button
-              className={styles.addButton}
-              onClick={() => router.push("/manage_users/create")}
-            >
-              + Add Examinee
-            </button>
-          </div>
+  <h2 className={styles.sectionTitle}>Manage Mock Board Exams</h2>
 
-          {/* Examinees Table */}
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Examinee Name</th>
-                  <th>Exam Name</th>
-                  <th>Exam Type</th>
-                  <th>Status</th>
-                  <th>Score</th>
-                  <th>Date Taken</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
+  {/* Top Controls */}
+  <div className={styles.topControls}>
+    <input
+      type="text"
+      placeholder="Search mock exams..."
+      className={styles.searchInput}
+    />
 
-              <tbody>
-                <tr>
-                  <td><input type="checkbox" /></td>
+    <button
+      className={styles.addBtn}
+      onClick={() => router.push("/manage_exams/create")}
+    >
+      ➕ Create Mock Exam
+    </button>
+  </div>
 
-                  <td className={styles.studentCell}>
-                    <Image
-                      src="/student1.png"
-                      alt="Examinee"
-                      width={35}
-                      height={35}
-                      className={styles.studentAvatar}
-                    />
-                    <span>John Doe</span>
-                  </td>
+  {/* Exam Table */}
+  <div className={styles.tableWrapper}>
+    <table className={styles.table}>
+      <thead>
+        <tr>
+          <th>Exam Title</th>
+          <th>Exam Type</th>
+          <th>Items</th>
+          <th>Duration</th>
+          <th>Status</th>
+          <th>Date Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-                  <td>General Education Mock</td>
-                  <td>General Education</td>
-                  <td><span className={styles.published}>Completed</span></td>
-                  <td>85%</td>
-                  <td>2025-01-15</td>
+      <tbody>
+        <tr>
+          <td>General Education Mock Board</td>
+          <td>General Education</td>
+          <td>150</td>
+          <td>2 hrs</td>
+          <td><span className={styles.published}>Published</span></td>
+          <td>2025-01-10</td>
+          <td className={styles.actions}>
+            <button className={styles.viewBtn}>View</button>
+            <button className={styles.editBtn}>Edit</button>
+            <button className={styles.deleteBtn}>Delete</button>
+          </td>
+        </tr>
 
-                  <td className={styles.actionBtns}>
-                    <button
-                      className={styles.viewBtn}
-                      onClick={() => router.push("/manage_users/view/1")}
-                    >
-                      View
-                    </button>
-                    <button
-                      className={styles.editIcon}
-                      onClick={() => router.push("/manage_users/edit/1")}
-                    >
-                      ✏️
-                    </button>
-                    <button className={styles.deleteIcon}>🗑️</button>
-                  </td>
-                </tr>
+        <tr>
+          <td>Professional Education Mock Board</td>
+          <td>Professional Education</td>
+          <td>170</td>
+          <td>2 hrs</td>
+          <td><span className={styles.published}>Published</span></td>
+          <td>2025-01-14</td>
+          <td className={styles.actions}>
+            <button className={styles.viewBtn}>View</button>
+            <button className={styles.editBtn}>Edit</button>
+            <button className={styles.deleteBtn}>Delete</button>
+          </td>
+        </tr>
 
-                <tr>
-                  <td><input type="checkbox" /></td>
+        <tr>
+          <td>Major Exam – English</td>
+          <td>Major Subject</td>
+          <td>150</td>
+          <td>2 hrs</td>
+          <td><span className={styles.draft}>Draft</span></td>
+          <td>2025-01-18</td>
+          <td className={styles.actions}>
+            <button className={styles.viewBtn}>View</button>
+            <button className={styles.editBtn}>Edit</button>
+            <button className={styles.deleteBtn}>Delete</button>
+          </td>
+        </tr>
 
-                  <td className={styles.studentCell}>
-                    <Image
-                      src="/student2.png"
-                      alt="Examinee"
-                      width={35}
-                      height={35}
-                      className={styles.studentAvatar}
-                    />
-                    <span>Jane Smith</span>
-                  </td>
+        <tr>
+          <td>Major Exam – Mathematics</td>
+          <td>Major Subject</td>
+          <td>150</td>
+          <td>2 hrs</td>
+          <td><span className={styles.published}>Published</span></td>
+          <td>2025-01-20</td>
+          <td className={styles.actions}>
+            <button className={styles.viewBtn}>View</button>
+            <button className={styles.editBtn}>Edit</button>
+            <button className={styles.deleteBtn}>Delete</button>
+          </td>
+        </tr>
 
-                  <td>Professional Education Mock</td>
-                  <td>Professional Education</td>
-                  <td><span className={styles.draft}>Pending</span></td>
-                  <td>–</td>
-                  <td>–</td>
+        <tr>
+          <td>LET Comprehensive Mock Board</td>
+          <td>Full Exam</td>
+          <td>300</td>
+          <td>3 hrs</td>
+          <td><span className={styles.published}>Published</span></td>
+          <td>2025-01-05</td>
+          <td className={styles.actions}>
+            <button className={styles.viewBtn}>View</button>
+            <button className={styles.editBtn}>Edit</button>
+            <button className={styles.deleteBtn}>Delete</button>
+          </td>
+        </tr>
 
-                  <td className={styles.actionBtns}>
-                    <button
-                      className={styles.viewBtn}
-                      onClick={() => router.push("/manage_users/view/2")}
-                    >
-                      View
-                    </button>
-                    <button
-                      className={styles.editIcon}
-                      onClick={() => router.push("/manage_users/edit/2")}
-                    >
-                      ✏️
-                    </button>
-                    <button className={styles.deleteIcon}>🗑️</button>
-                  </td>
-                </tr>
-
-              </tbody>
-            </table>
-          </div>
-        </div>
+      </tbody>
+    </table>
+  </div>
+</div>
       </main>
     </div>
   );
