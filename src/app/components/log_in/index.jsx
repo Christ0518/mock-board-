@@ -40,7 +40,10 @@ export default function LogIn() {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginBox}>
-        <h1 className={styles.title}>Log In</h1>
+        <div className={styles.logo}>
+          <img src="/logo.png" alt="Logo" />
+        </div>
+        <h1 className={styles.title}>Welcome Back</h1>
         
         {/* Google Login Button */}
         <div className={styles.googleLogin}>

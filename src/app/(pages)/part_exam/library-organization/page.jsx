@@ -259,15 +259,26 @@ function QuizPage() {
   const [answers, setAnswers] = useState({});
   const [finished, setFinished] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60 * 60 * 1000);
+  const [isPaused, setIsPaused] = useState(false);
 
   const question = questions[index];
 
   // Timer: persist end time so refresh keeps countdown
   useEffect(() => {
     const key = 'lle_quiz_end';
+    const pausedKey = 'lle_quiz_paused';
+    const pausedTimeKey = 'lle_quiz_paused_time';
+    
     let end = null;
     try {
       end = localStorage.getItem(key);
+      const wasPaused = localStorage.getItem(pausedKey) === 'true';
+      const savedPausedTime = localStorage.getItem(pausedTimeKey);
+      
+      if (wasPaused && savedPausedTime) {
+        setIsPaused(true);
+        setTimeLeft(Number(savedPausedTime));
+      }
     } catch (e) {
       end = null;
     }
@@ -280,11 +291,17 @@ function QuizPage() {
 
     const endTs = Number(end);
     function update() {
+      if (isPaused || finished) return; // Stop timer if paused or finished
+      
       const remaining = endTs - Date.now();
       if (remaining <= 0) {
         setTimeLeft(0);
         setFinished(true);
-        try { localStorage.removeItem(key); } catch (e) {}
+        try { 
+          localStorage.removeItem(key);
+          localStorage.removeItem(pausedKey);
+          localStorage.removeItem(pausedTimeKey);
+        } catch (e) {}
         return;
       }
       setTimeLeft(remaining);
@@ -293,7 +310,7 @@ function QuizPage() {
     update();
     const id = setInterval(update, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [isPaused, finished]);
 
   function formatTime(ms) {
     if (!ms || ms <= 0) return '00:00:00';
@@ -304,6 +321,30 @@ function QuizPage() {
     return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   }
 
+  function togglePause() {
+    const key = 'lle_quiz_end';
+    const pausedKey = 'lle_quiz_paused';
+    const pausedTimeKey = 'lle_quiz_paused_time';
+    
+    if (!isPaused) {
+      // Pausing: save current time left
+      try {
+        localStorage.setItem(pausedKey, 'true');
+        localStorage.setItem(pausedTimeKey, String(timeLeft));
+      } catch (e) {}
+      setIsPaused(true);
+    } else {
+      // Resuming: set new end time
+      const newEnd = Date.now() + timeLeft;
+      try {
+        localStorage.setItem(key, String(newEnd));
+        localStorage.removeItem(pausedKey);
+        localStorage.removeItem(pausedTimeKey);
+      } catch (e) {}
+      setIsPaused(false);
+    }
+  }
+
   function select(choiceIdx) {
     setAnswers((prev) => ({ ...prev, [index]: choiceIdx }));
   }
@@ -312,7 +353,12 @@ function QuizPage() {
     if (index < questions.length - 1) setIndex(index + 1);
     else {
       setFinished(true);
-      try { localStorage.removeItem('lle_quiz_end'); } catch (e) {}
+      // Stop timer and clean up localStorage when quiz is finished
+      try { 
+        localStorage.removeItem('lle_quiz_end');
+        localStorage.removeItem('lle_quiz_paused');
+        localStorage.removeItem('lle_quiz_paused_time');
+      } catch (e) {}
     }
   }
 
@@ -323,9 +369,22 @@ function QuizPage() {
   return (
     <div className={styles.quizContainer}>
       <h1 className={styles.quizTitle}>LLE — Library Organization & Management (Practice)</h1>
-      <div className={styles.timer}>Time Remaining: {formatTime(timeLeft)}</div>
+      <div className={styles.timerSection}>
+        <div className={styles.timer}>Time Remaining: {formatTime(timeLeft)}</div>
+        <button onClick={togglePause} className={styles.pauseBtn}>
+          {isPaused ? '▶ Resume' : '⏸ Pause'}
+        </button>
+      </div>
       {!finished ? (
-        <div className={styles.card}>
+        <div className={`${styles.card} ${isPaused ? styles.disabled : ''}`}>
+          {isPaused && (
+            <div className={styles.pausedOverlay}>
+              <div className={styles.pausedMessage}>
+                <h3>Quiz Paused</h3>
+                <p>Click Resume to continue</p>
+              </div>
+            </div>
+          )}
           <div className={styles.questionBlock}>
             <div className={styles.qNumber}>Question {index + 1} / {questions.length}</div>
             <div className={styles.qText}>{question.q}</div>
@@ -338,14 +397,15 @@ function QuizPage() {
                   name={`q-${index}`}
                   checked={answers[index] === i}
                   onChange={() => select(i)}
+                  disabled={isPaused}
                 />
                 <span>{String.fromCharCode(97 + i)}. {c}</span>
               </label>
             ))}
           </div>
           <div className={styles.controls}>
-            <button onClick={prev} disabled={index === 0} className={styles.controlBtn}>Previous</button>
-            <button onClick={next} className={styles.controlBtn}>{index < questions.length - 1 ? 'Next' : 'Finish'}</button>
+            <button onClick={prev} disabled={index === 0 || isPaused} className={styles.controlBtn}>Previous</button>
+            <button onClick={next} disabled={isPaused} className={styles.controlBtn}>{index < questions.length - 1 ? 'Next' : 'Finish'}</button>
           </div>
         </div>
       ) : (
@@ -381,7 +441,14 @@ function QuizPage() {
           </div>
           <div className={styles.controls}>
             <button onClick={() => { setIndex(0); setFinished(false); }} className={styles.controlBtn}>Review Answers</button>
-            <button onClick={() => { try { localStorage.removeItem('lle_quiz_end'); } catch (e) {}; router.push('/exam'); }} className={styles.controlBtn}>Back to Exams</button>
+            <button onClick={() => { 
+              try { 
+                localStorage.removeItem('lle_quiz_end');
+                localStorage.removeItem('lle_quiz_paused');
+                localStorage.removeItem('lle_quiz_paused_time');
+              } catch (e) {}
+              router.push('/exam'); 
+            }} className={styles.controlBtn}>Back to Exams</button>
           </div>
         </div>
       )}

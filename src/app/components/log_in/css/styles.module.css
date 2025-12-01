@@ -1,34 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 /* 🔹 Overall Page Container */
 .loginContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0070f3, #00c6ff);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-image: linear-gradient(
-      rgba(0, 0, 0, 0.4),
-      rgba(0, 0, 0, 0.4)
+      rgba(102, 126, 234, 0.7),
+      rgba(118, 75, 162, 0.7)
     ),
     url('/bg2.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow: hidden;
+}
+
+.loginContainer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+  50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
 }
 
 /* 🔹 Glassy Login Box */
 .loginBox {
-   background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.5);
   padding: 3rem 2.5rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   width: 100%;
-  max-width: 420px;
-  color: #fff;
+  max-width: 440px;
+  color: #2d3748;
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.6s ease-out;
+  position: relative;
+  z-index: 1;
+}
+
+.loginBox:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
 }
 
 
@@ -37,6 +67,7 @@
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: center;
+  transform: scale(1.1);
 }
 
 .divider {
@@ -50,13 +81,14 @@
 .divider::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
 }
 
 .divider span {
   padding: 0 1rem;
   color: #718096;
   font-size: 0.875rem;
+  font-weight: 600;
 }
 
 
@@ -64,22 +96,39 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 /* 🔹 Title */
 .title {
   text-align: center;
-  font-size: 2.2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #fff;
-  letter-spacing: 1px;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
 }
 
 /* 🔹 Form Layout */
@@ -94,50 +143,80 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  text-align: left;
 }
 
 .inputGroup label {
-  font-size: 0.9rem;
-  color: #f0f0f0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-left: 0.25rem;
 }
 
 .inputGroup input {
-  padding: 0.85rem;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.85);
+  padding: 1rem 1.25rem;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
+  color: #2d3748;
   transition: all 0.3s ease;
+  font-family: inherit;
 }
 
 .inputGroup input:focus {
   outline: none;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.3);
+  background: #ffffff;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 4px 12px rgba(102, 126, 234, 0.15);
+  transform: translateY(-1px);
+}
+
+.inputGroup input::placeholder {
+  color: #a0aec0;
 }
 
 /* 🔹 Submit Button */
 .submitButton {
-  background: linear-gradient(135deg, #0070f3, #00b3ff);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 0.9rem;
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 10px;
+  border-radius: 50px;
   font-size: 1.1rem;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.5px;
-  transition: transform 0.2s ease, background 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 112, 243, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.submitButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.submitButton:hover::before {
+  left: 100%;
 }
 
 .submitButton:hover {
-  background: linear-gradient(135deg, #0051b3, #0080ff);
   transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
 }
 
 .submitButton:active {
-  transform: translateY(1px);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
 /* 🔹 Switch Text and Link */
@@ -145,7 +224,7 @@
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.95rem;
-  color: #eee;
+  color: #4a5568;
 }
 
 .switchText span {
@@ -153,15 +232,19 @@
 }
 
 .switchLink {
-  color: #00b3ff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .switchLink:hover {
-  color: #fff;
   text-decoration: underline;
+  transform: scale(1.05);
 }
 
 /* 🔹 Optional: Add Logo */

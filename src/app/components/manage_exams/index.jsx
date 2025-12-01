@@ -54,13 +54,7 @@ export default function ManageUsers() {
         <header className={styles.header}>
           <div className={styles.userSection}>
             <div className={styles.userProfile}>
-              <Image
-                src="/admin.png"
-                alt="Admin avatar"
-                width={50}
-                height={50}
-                className={styles.avatar}
-              />
+           
               <div className={styles.userInfo}>
                 <span className={styles.userName}>{adminData.name}</span>
                 <span className={styles.userEmail}>{adminData.email}</span>
@@ -71,7 +65,7 @@ export default function ManageUsers() {
               className={styles.logoutBtn}
               onClick={() => {
                 localStorage.removeItem("admin");
-                router.push("/admin-login");
+                router.push("/log_in");
               }}
             >
               Logout
@@ -82,14 +76,8 @@ export default function ManageUsers() {
         {/* MOCK BOARD EXAMINEES LIST */}
        <div className={styles.content}>
 
-  {/* Back Button */}
-  <button
-    className={styles.addBtn}
-    style={{ marginBottom: "15px", width: "120px" }}
-    onClick={() => router.push("/admin_page")}
-  >
-    ← Back
-  </button>
+ 
+  
 
   <h2 className={styles.sectionTitle}>Manage Mock Board Exams</h2>
 

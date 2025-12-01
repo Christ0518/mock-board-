@@ -47,6 +47,9 @@ export default function SignupPage() {
   return (
     <div className={styles.signupContainer}>
       <div className={styles.signupBox}>
+        <div className={styles.logoSection}>
+          <img src="/lccb_logo.png" alt="LCCB Logo" className={styles.logo} />
+        </div>
         <h2 className={styles.title}>Create Account</h2>
 
         <form className={styles.form} onSubmit={handleSubmit}>

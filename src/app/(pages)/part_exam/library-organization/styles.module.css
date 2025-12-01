@@ -48,21 +48,63 @@
   border-radius: 2px;
 }
 
+.timerSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
 .timer {
   text-align: center;
   font-size: 1.25rem;
   font-weight: 700;
   padding: 1rem 2rem;
-  margin-bottom: 2rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-radius: 50px;
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-  display: inline-block;
-  width: auto;
-  margin-left: 50%;
-  transform: translateX(-50%);
   animation: pulse 2s ease-in-out infinite;
+}
+
+.pauseBtn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 1.75rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pauseBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.pauseBtn:hover::before {
+  left: 100%;
+}
+
+.pauseBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.pauseBtn:active {
+  transform: translateY(0);
 }
 
 @keyframes pulse {
@@ -95,6 +137,51 @@
   transform: translateY(-4px);
   box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
   border-color: rgba(102, 126, 234, 0.3);
+}
+
+.card.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.pausedOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(102, 126, 234, 0.15);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 20px;
+}
+
+.pausedMessage {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%);
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.pausedMessage h3 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.pausedMessage p {
+  color: #4a5568;
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 .questionBlock {
@@ -349,9 +436,19 @@
     padding-bottom: 0.75rem;
   }
 
+  .timerSection {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
   .timer {
     font-size: 1rem;
     padding: 0.75rem 1.5rem;
+  }
+
+  .pauseBtn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
   }
 
   .card {
