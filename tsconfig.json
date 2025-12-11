@@ -36,7 +36,7 @@
     "src/app/components/dashboard/index.jsx",
     "src/app/components/exams/index.jsx",
     ".next/dev/types/**/*.ts"
-  ],
+, "src/app/utilities/Fetch_toFile.js"  ],
   "exclude": [
     "node_modules"
   ]

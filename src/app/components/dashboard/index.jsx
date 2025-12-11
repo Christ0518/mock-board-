@@ -5,7 +5,7 @@ import Image from 'next/image';
 import styles from './css/styles.module.css';
 import Fetch_to from '../../utilities/Fetch_to';
 
-export default function Dashboard() {
+export default function Dashboard({ email }) {
   const router = useRouter();
   const [userData, setUserData] = useState({ name: '', email: '' });
   const [activeSection, setActiveSection] = useState('home');
@@ -75,13 +75,7 @@ export default function Dashboard() {
     
 
     <div className={styles.userProfile}>
-      <Image
-        src="/user.jpg"
-        alt="User avatar"
-        width={50}
-        height={50}
-        className={styles.avatar}
-      />
+      <h3> {email ? email : " --- "} </h3>
       <div className={styles.userInfo}>
         <span className={styles.userName}>{userData.name}</span>
       </div>

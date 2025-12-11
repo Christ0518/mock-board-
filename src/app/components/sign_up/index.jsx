@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { Fetch_to } from "../../utilities";
+import api_link from "../../config/api_links/links.json";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function SignupPage() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",   // 🔹 Added confirm password
+    confirmPassword: "",
     role: "student",
   });
 
@@ -24,24 +25,31 @@ export default function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 🔹 Password Confirmation Check
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-
-    const data = await Fetch_to('/services/api/signup', {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      role: formData.role,
-    });
+    const data = await Fetch_to(api_link.auth.check_email, { email: formData.email });
 
     if (data.success) {
-      router.push("/login");
+
+      const data = await Fetch_to(api_link.auth.signup, {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        c_password: formData.confirmPassword,
+        role: formData.role
+      });
+
+      if (data.success) {
+        router.push("/login");
+      } else {
+        alert(data.message);
+      }
+
     } else {
+
       alert(data.message);
+
     }
+
+    
   };
 
   return (

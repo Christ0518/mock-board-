@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Fetch_to } from '../../utilities';
+import api_link from "../../config/api_links/links.json";
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
@@ -24,15 +25,15 @@ export default function LogIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = await Fetch_to('/services/api/login', formData);
+    const response = await Fetch_to(api_link.auth.signin, formData);
 
-    if (data && data.success) {
+    if (response && response.success) {
       await Fetch_to('/services/jwt/auth', {
         email: formData.email
       });
 
-      console.log(data);
-      if (data.data.user.role === "admin") {
+      console.log(response.data);
+      if (response.data.message[0].role === "admin") {
         router.push('/admin');
       } else {
         router.push('/dashboard');

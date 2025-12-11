@@ -1,0 +1,11 @@
+{
+    "auth" : {
+        "signup" : "/services/supabase/auth/signup",
+        "signin" : "/services/supabase/auth/signin",
+        "check_email" : "/services/supabase/auth/check_email"
+    },
+    "storage" : {
+        "uploadfile" : "/services/supabase/storage/uploadfile",
+        "retrieve" : "/services/supabase/storage/retrieve"
+    }
+}
