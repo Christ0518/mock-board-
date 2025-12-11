@@ -23,10 +23,20 @@ export default function LogIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const data = await Fetch_to('/services/api/login', formData);
 
     if (data && data.success) {
-      router.push('/dashboard');
+      await Fetch_to('/services/jwt/auth', {
+        email: formData.email
+      });
+
+      console.log(data);
+      if (data.data.user.role === "admin") {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
     } else {
       alert(data?.message || 'Login failed. Please try again.');
     }

@@ -1,27 +1,39 @@
-export default async function Fetch_to(dir, payload = {}, headers = {}) {
+export default async function Fetch_to(
+  dir,
+  payload = {},
+  headers = {},
+  retries = 3,      // number of attempts
+  delay = 1000      // wait time between attempts in ms
+) {
   if (!dir || dir === "") {
-    if (typeof window !== 'undefined') alert("Invalid API Directory not found");
-    return null;
+    if (typeof window !== "undefined") alert("Invalid API Directory not found");
+    return { success: false, message: "Invalid API Directory" };
   }
 
-  try {
-    const response = await fetch(dir, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...headers },
-      body: JSON.stringify(payload),
-    });
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(dir, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...headers },
+        body: JSON.stringify(payload),
+      });
 
-    const data = await response.json();
+      const data = await response.json().catch(() => null); // safe parse
 
-    if (response.ok) {
-      return data;
-    } else {
-      console.error(`Failed to fetch ${dir}: ${response.status}`);
-      return data;
+      if (response.ok) {
+        return { success: true, data }; // success
+      } else {
+        console.log(data?.error);
+        return { success: false, message: data?.error || `Request failed: ${response.status}` };
+      }
+    } catch (err) {
+      let message = "Unknown fetch error";
+      if (err instanceof Error) message = err.message;
+      console.error(`Attempt ${attempt} fetch error:`, message);
     }
 
-  } catch (err) {
-    console.error("Fetch_to error:", err);
-    return null;
+    if (attempt < retries) await new Promise(res => setTimeout(res, delay));
   }
+
+  return { success: false, message: `All ${retries} attempts failed for ${dir}` };
 }

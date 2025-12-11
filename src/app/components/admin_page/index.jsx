@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "./css/styles.module.css";
+import Fetch_to from "../../utilities/Fetch_to";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -73,9 +74,14 @@ export default function AdminDashboard() {
 
               <button
                 className={styles.logoutBtn}
-                onClick={() => {
-                  localStorage.removeItem("admin");
-                  router.push("/admin-login");
+                onClick={ async() => {
+                  const response = await Fetch_to("/services/jwt/deauth");
+                  if (response.success) {
+                    alert("Successfully");
+                    router.push('/login');
+                  } else {
+                    alert("Something Went Wrong");
+                  }
                 }}
               >
                 Logout
@@ -101,7 +107,7 @@ export default function AdminDashboard() {
               <div className={styles.statsCard}>
                 <h3>Completed Exam Sessions</h3>
                 <p className={styles.statNumber}>510</p>
-              </div>
+              </div>                                            
 
               <div className={styles.statsCard}>
                 <h3>Active Students Today</h3>

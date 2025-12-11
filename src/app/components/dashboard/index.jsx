@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './css/styles.module.css';
+import Fetch_to from '../../utilities/Fetch_to';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -89,10 +90,15 @@ export default function Dashboard() {
     {/* Logout button moved outside userProfile */}
     <button 
       className={styles.logoutBtn}
-      onClick={() => {
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('user');
-        router.push('/login');
+      onClick={ async() => {
+        const response = await Fetch_to("/services/jwt/deauth");
+        if (response.success) {
+          alert("Successfully");
+          router.push('/login');
+        } else {
+          alert("Something Went Wrong");
+        }
+        
       }}
     >
       Logout
