@@ -1,9 +1,8 @@
 "use client";
-import * as XLSX from "xlsx";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./css/styles.module.css";
-import { SweetAlert2, Fetch_toFile, Fetch_to } from "../../utilities";
+import { Fetch_to, SweetAlert2, Fetch_download } from "../../utilities";
 import api_link from "../../config/api_links/links.json";
 import Swal from "sweetalert2";
 
@@ -11,9 +10,7 @@ export default function ManageExams({ email }) {
   const router = useRouter();
   const [adminData, setAdminData] = useState({ name: "", email: "" });
   const [activeSection, setActiveSection] = useState("manageUsers");
-  const fileRef = useRef(null);
   const [data, setData] = useState([]);
-  const [refresh, setRefresh] = useState("");
 
   const adminMenuItems = [
     { id: "adminHome", label: "Dashboard", dir: "/admin" },
@@ -38,72 +35,14 @@ export default function ManageExams({ email }) {
     };
     RetrieveData();
 
-  }, [refresh, email]);
-
-  const UploadExcel = () => {
-        fileRef.current?.click();
-    };
+  }, [email]);
 
 
-  const HandleFile = async (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
 
-      if (file.type !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-          alert("Please select an Excel file (.xlsx)");
-          return;
-      }
-
-      console.log("Excel selected:", file);
-
-      // ------------ READ EXCEL ROWS ON CLIENT ------------
-      const reader = new FileReader();
-
-      reader.onload = async (event) => {
-          const arrayBuffer = event.target.result;
-          const workbook = XLSX.read(arrayBuffer, { type: "array" });
-
-          const sheetName = workbook.SheetNames[0]; // first sheet
-          const worksheet = workbook.Sheets[sheetName];
-
-          const rows = XLSX.utils.sheet_to_json(worksheet);
-
-          console.log("Excel Rows:", rows); 
-          // rows array will contain all data inside the sheet
-
-          // ------------ UPLOAD THE FILE TO BACKEND ------------
-          SweetAlert2("Uploading", "Please wait...", "info", false, "", false, "", true);
-
-          const response = await Fetch_toFile(api_link.storage.uploadfile, file, { email: email, items: rows.length });
-
-          Swal.close();
-
-          if (response.success) {
-              SweetAlert2("Success", "Successfully uploaded", "success", true, "Okay");
-              fileRef.current.value = "";
-              setRefresh(!refresh);
-          } else {
-              SweetAlert2("Error", response.message, "error", true, "Confirm");
-              fileRef.current.value = "";
-          }
-      };
-
-      reader.readAsArrayBuffer(file);
-  };
 
   return (
     <div className={styles.dashboardContainer}>
       {/* SIDEBAR */}
-
-      <>
-        <input
-        ref={fileRef}
-        type="file"
-        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        style={{ display: "none" }}
-        onChange={HandleFile}
-        />
-      </>
 
       <aside className={styles.sidebar}>
         <nav className={styles.nav}>
@@ -166,7 +105,7 @@ export default function ManageExams({ email }) {
     />
 
     <button
-      className={styles.addBtn} onClick={UploadExcel}
+      className={styles.addBtn} onClick={() => {router.push("/form");}}
     >
       ➕ Upload Excel File
     </button>
@@ -191,17 +130,73 @@ export default function ManageExams({ email }) {
             <tr key={index}>
               <td> {excel.exam_title} </td>
               <td> {excel.items} </td>
-              <td> {excel.duration} </td>
+              <td> {excel.duration} min </td>
               <td> {new Date(excel.created_at).toLocaleDateString("en-US")} </td>
               <td className={styles.actions}>
-                <button className={styles.viewBtn}>View</button>
-                <button className={styles.editBtn}>Edit</button>
-                <button className={styles.deleteBtn}>Delete</button>
+                <button
+                    className={styles.editBtn}
+                    onClick={async () => {
+                      try {
+                        const response = await Fetch_download(
+                          api_link.storage.download,
+                          { filePath: excel.file_dir, name: excel.exam_title },
+                          { "x-api-key": process.env.API_KEY || "" },
+                          3,
+                          1000,
+                          true // <-- important: expect a Blob
+                        );
+
+                        if (!response.success) {
+                          SweetAlert2("Error", `${response.message}`, "error", true, "Okay");
+                          return;
+                        }
+
+                        // Trigger download
+                        const url = window.URL.createObjectURL(response.data);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = excel.exam_title + ".xlsx";
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                      } catch (error) {
+                        console.error(error);
+                        SweetAlert2("Error", "Download failed", "error", true, "Okay");
+                      }
+                    }}
+                  >
+                    Download
+                  </button>
+
+                <button className={styles.deleteBtn} onClick={ async () => {
+
+                  SweetAlert2("Deleting", "Please wait...", "info", false, "", false, "", true);
+
+                  const response = await Fetch_to(api_link.storage.delete, { id: excel.id, filePath: excel.file_dir });
+
+                  Swal.close();
+
+                  if (response.success) {
+                      SweetAlert2("Success", "Deleted!", "success", true, "Okay")
+                      .then(() => {
+                        window.location.reload();
+                      });
+
+                  } else {
+                      SweetAlert2("Error", response.message || "Upload failed", "error", true, "Confirm").then(() => {
+                        window.location.reload();
+                      });
+                  }
+
+                }} >Delete</button>
               </td>
             </tr>
           ))
         ) : (
-          <tr> </tr>
+          <tr> 
+            <td></td>
+          </tr>
         )}
 
         

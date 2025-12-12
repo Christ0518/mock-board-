@@ -138,49 +138,6 @@ export default function ManageUsers() {
                     >
                       View
                     </button>
-                    <button
-                      className={styles.editIcon}
-                      onClick={() => router.push("/manage_users/edit/1")}
-                    >
-                      ✏️
-                    </button>
-                    <button className={styles.deleteIcon}>🗑️</button>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td><input type="checkbox" /></td>
-
-                  <td className={styles.studentCell}>
-                    <Image
-                      src="/student2.png"
-                      alt="Examinee"
-                      width={35}
-                      height={35}
-                      className={styles.studentAvatar}
-                    />
-                    <span>Jane Smith</span>
-                  </td>
-
-                  <td>Professional Education Mock</td>
-                  <td>Professional Education</td>
-                  <td><span className={styles.draft}>Pending</span></td>
-                  <td>–</td>
-                  <td>–</td>
-
-                  <td className={styles.actionBtns}>
-                    <button
-                      className={styles.viewBtn}
-                      onClick={() => router.push("/manage_users/view/2")}
-                    >
-                      View
-                    </button>
-                    <button
-                      className={styles.editIcon}
-                      onClick={() => router.push("/manage_users/edit/2")}
-                    >
-                      ✏️
-                    </button>
                     <button className={styles.deleteIcon}>🗑️</button>
                   </td>
                 </tr>

@@ -1,15 +1,16 @@
 "use client";
-
+import api_link from "../../config/api_links/links.json";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import styles from "./css/styles.module.css";
 import Fetch_to from "../../utilities/Fetch_to";
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ email }) {
   const router = useRouter();
   const [adminData, setAdminData] = useState({ name: "", email: "" });
   const [activeSection, setActiveSection] = useState("adminHome");
+  const [data, setData] = useState([]);
+  const [userData, setUserData] = useState([]);
 
   const adminMenuItems = [
     { id: "adminHome", label: "Dashboard", dir: "/admin" },
@@ -28,12 +29,28 @@ export default function AdminDashboard() {
       console.error("Error loading admin data:", error);
     }
 
+    const RetrieveUserData = async () => {
+        const response = await Fetch_to(api_link.admin.retrieve);
+        if (response.success) {
+            setUserData(response.data.message);
+        }
+    };
+    RetrieveUserData();
+
+    const RetrieveData = async () => {
+        const response = await Fetch_to(api_link.storage.retrieve, { email: email });
+        if (response.success) {
+            setData(response.data.message);
+        }
+    };
+    RetrieveData();
+
     // Detect active page
     const path = window.location.pathname;
     const currentSection =
       adminMenuItems.find((item) => item.dir === path)?.id || "adminHome";
     setActiveSection(currentSection);
-  }, []);
+  }, [email]);
 
   return (
       <div className={styles.dashboardContainer}>
@@ -96,23 +113,18 @@ export default function AdminDashboard() {
             <div className={styles.statsGrid}>
               <div className={styles.statsCard}>
                 <h3>Total Users</h3>
-                <p className={styles.statNumber}>235</p>
+                <p className={styles.statNumber}> {userData.length} </p>
               </div>
 
               <div className={styles.statsCard}>
                 <h3>Mock Exams Created</h3>
-                <p className={styles.statNumber}>42</p>
+                <p className={styles.statNumber}> {data.length} </p>
               </div>
 
               <div className={styles.statsCard}>
                 <h3>Completed Exam Sessions</h3>
-                <p className={styles.statNumber}>510</p>
+                <p className={styles.statNumber}> 0 </p>
               </div>                                            
-
-              <div className={styles.statsCard}>
-                <h3>Active Students Today</h3>
-                <p className={styles.statNumber}>78</p>
-              </div>
             </div>
 
             <div className={styles.reviewerHubWrapper}>
@@ -121,7 +133,7 @@ export default function AdminDashboard() {
                 <p>Manage users, exams, results, and system settings.</p>
                 <button
                   className={styles.startBtn}
-                  onClick={() => router.push("/admin/manage-users")}
+                  onClick={() => router.push("/manage_users")}
                 >
                   Manage Users
                 </button>

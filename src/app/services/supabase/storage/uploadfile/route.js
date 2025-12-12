@@ -5,10 +5,10 @@ export async function POST(req) {
     
     const form = await req.formData();
     const file = form.get("file");
+    const name = form.get("name");
     const email = form.get("email");
     const items = form.get("items");
-
-    const filename = file.name;
+    const duration = form.get("duration");
 
     const cleanEmail = email.trim().toLowerCase();
 
@@ -23,7 +23,7 @@ export async function POST(req) {
     .from("storage")
     .select("id")
     .eq("email", cleanEmail)
-    .eq("file_dir", filename);
+    .eq("exam_title", name);
 
     if (data && data.length > 0) return NextResponse.json({ success: false, error: "Pdf file Already exist" }, { status: 409 });
 
@@ -49,7 +49,7 @@ export async function POST(req) {
             
             const { data, error } = await supabaseServer
             .from("storage")
-            .insert([{ file_dir: filePath, email: cleanEmail, exam_title: filename, items: items }]);
+            .insert([{ file_dir: filePath, email: cleanEmail, exam_title: name, items: items, duration: duration }]);
 
             if (error) {
                 console.error("Supabase Query Error: ", error);

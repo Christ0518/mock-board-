@@ -6,6 +6,11 @@
     },
     "storage" : {
         "uploadfile" : "/services/supabase/storage/uploadfile",
-        "retrieve" : "/services/supabase/storage/retrieve"
+        "retrieve" : "/services/supabase/storage/retrieve",
+        "delete" : "/services/supabase/storage/delete",
+        "download" : "/services/supabase/storage/download"
+    },
+    "admin" : {
+        "retrieve" : "/services/supabase/admin/retrieve_user"
     }
 }

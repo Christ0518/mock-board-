@@ -242,6 +242,7 @@
   width: 100%;
   border-collapse: collapse;
   min-width: 800px;
+  overflow: hidden;
 }
 
 .table th,

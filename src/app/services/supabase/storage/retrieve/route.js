@@ -5,13 +5,13 @@ export async function POST(req) {
     
     const { email } = await req.json();
 
-    const cleanEmail = email.trim().toLowerCase();
+    if (!email) return NextResponse.json({ success: false, error: "Email not found" }, { status: 404 });
 
-    if (!cleanEmail) return NextResponse.json({ success: false, error: "Email not found" }, { status: 404 });
+    const cleanEmail = email.trim().toLowerCase();
 
     const { data, error } = await supabaseServer
     .from("storage")
-    .select("exam_title, items, duration, created_at")
+    .select("id, file_dir, exam_title, items, duration, created_at")
     .eq("email", cleanEmail);
 
     if (error) {

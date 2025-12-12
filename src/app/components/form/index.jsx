@@ -3,19 +3,25 @@ import * as XLSX from "xlsx";
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './css/styles.module.css';
-import { SweetAlert2, Fetch_toFile, Fetch_to } from "../../utilities";
+import { SweetAlert2, Fetch_toFile } from "../../utilities";
 import api_link from "../../config/api_links/links.json";
 import Swal from "sweetalert2";
 
 export default function Form ({ email }) {
   const router = useRouter();
   const fileRef = useRef(null);
-  
+  const [excelFile, setExcelFile] = useState(null);
   const [adminData, setAdminData] = useState({ name: "", email: email || "", duration: "" });
   const [loading, setLoading] = useState(false);
-  const [refresh, setRefresh] = useState(false);
   const [fileName, setFileName] = useState("");
   const [rowCount, setRowCount] = useState(0);
+
+  useEffect(() => {
+    setAdminData(prev => ({
+      ...prev,
+      email: email || ""
+    }));
+  }, [email]);
   
   const UploadExcel = () => {
     fileRef.current?.click();
@@ -31,6 +37,7 @@ export default function Form ({ email }) {
       }
 
       setFileName(file.name);
+      setExcelFile(file);
 
       // ------------ READ EXCEL ROWS ON CLIENT ------------
       const reader = new FileReader();
@@ -46,30 +53,6 @@ export default function Form ({ email }) {
           setRowCount(rows.length);
 
           console.log("Excel Rows:", rows);
-
-          // ------------ UPLOAD THE FILE TO BACKEND ------------
-          SweetAlert2("Uploading", "Please wait...", "info", false, "", false, "", true);
-
-          const response = await Fetch_toFile(api_link.storage.uploadfile, file, { 
-            email: adminData.email, 
-            items: rows.length, 
-            duration: adminData.duration,
-            name: adminData.name
-          }); 
-
-          Swal.close();
-
-          if (response.success) {
-              SweetAlert2("Success", "File uploaded successfully!", "success", true, "Okay");
-              fileRef.current.value = "";
-              setFileName("");
-              setRowCount(0);
-              setRefresh(!refresh);
-          } else {
-              SweetAlert2("Error", response.message || "Upload failed", "error", true, "Confirm");
-              fileRef.current.value = "";
-              setFileName("");
-          }
       };
 
       reader.readAsArrayBuffer(file);
@@ -86,22 +69,34 @@ export default function Form ({ email }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!adminData.name.trim()) {
-      SweetAlert2("Missing Field", "Please enter exam name", "warning", true, "Okay");
-      return;
-    }
-    
-    if (!adminData.duration || adminData.duration <= 0) {
-      SweetAlert2("Invalid Duration", "Please enter a valid duration in minutes", "warning", true, "Okay");
-      return;
-    }
-    
-    if (!fileName) {
-      SweetAlert2("No File", "Please upload an Excel file", "warning", true, "Okay");
-      return;
-    }
-    
-    SweetAlert2("Success", "Form submitted successfully!", "success", true, "Okay");
+    // ------------ UPLOAD THE FILE TO BACKEND ------------
+          SweetAlert2("Uploading", "Please wait...", "info", false, "", false, "", true);
+
+          const response = await Fetch_toFile(api_link.storage.uploadfile, excelFile, { 
+            email: adminData.email, 
+            items: rowCount, 
+            duration: adminData.duration,
+            name: adminData.name
+          }); 
+
+          Swal.close();
+
+          if (response.success) {
+              SweetAlert2("Success", "File uploaded successfully!", "success", true, "Okay");
+              fileRef.current.value = "";
+              setFileName("");
+              setRowCount(0);
+              setAdminData(prev => ({
+                ...prev,
+                name: "", duration: ""
+              }));
+          } else {
+              SweetAlert2("Error", response.message || "Upload failed", "error", true, "Confirm");
+              fileRef.current.value = "";
+              setFileName("");
+          }
+
+
   };
 
   return (
@@ -126,24 +121,6 @@ export default function Form ({ email }) {
                 value={adminData.name}
                 onChange={handleInputChange}
                 placeholder="e.g., Final Mathematics Exam"
-                className={styles.input}
-                required
-              />
-            </div>
-
-            {/* Email */}
-            <div className={styles.formGroup}>
-              <label className={styles.label} htmlFor="email">
-                <span className={styles.labelIcon}>📧</span>
-                Admin Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={adminData.email}
-                onChange={handleInputChange}
-                placeholder="admin@example.com"
                 className={styles.input}
                 required
               />
@@ -228,7 +205,7 @@ export default function Form ({ email }) {
             <div className={styles.formActions}>
               <button 
                 type="button" 
-                onClick={() => { router.back(); setLoading(true); }}
+                onClick={() => { router.push("/manage_exams"); setLoading(true); }}
                 className={styles.secondaryButton}
               >
                 ← Back
