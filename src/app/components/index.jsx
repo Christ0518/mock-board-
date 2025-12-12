@@ -7,5 +7,5 @@ export { default as PartExam } from './copy_exam';
 export { default as Admin_page } from './admin_page';
 export { default as Manage_users } from './manage_users';
 export { default as Manage_exams } from './manage_exams';
-
+export { default as Form } from './form';
 
