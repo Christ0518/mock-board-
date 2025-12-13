@@ -30,7 +30,7 @@ export default function AdminDashboard({ email }) {
     }
 
     const RetrieveUserData = async () => {
-        const response = await Fetch_to(api_link.admin.retrieve);
+        const response = await Fetch_to(api_link.admin.retrieve_user_assign_by, { email: email });
         if (response.success) {
             setUserData(response.data.message);
         }
@@ -113,12 +113,12 @@ export default function AdminDashboard({ email }) {
             <div className={styles.statsGrid}>
               <div className={styles.statsCard}>
                 <h3>Total Users</h3>
-                <p className={styles.statNumber}> {userData.length} </p>
+                <p className={styles.statNumber}> {userData ? userData.length : 0} </p>
               </div>
 
               <div className={styles.statsCard}>
                 <h3>Mock Exams Created</h3>
-                <p className={styles.statNumber}> {data.length} </p>
+                <p className={styles.statNumber}> {data ? data.length : 0} </p>
               </div>
 
               <div className={styles.statsCard}>

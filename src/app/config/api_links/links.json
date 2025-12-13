@@ -11,6 +11,8 @@
         "download" : "/services/supabase/storage/download"
     },
     "admin" : {
-        "retrieve" : "/services/supabase/admin/retrieve_user"
+        "retrieve_user_assign_by" : "/services/supabase/admin/retrieve_user_assign_by",
+        "retrieve_all_user" : "/services/supabase/admin/retrieve_all_user_student",
+        "assigned" : "/services/supabase/admin/assigned"
     }
 }

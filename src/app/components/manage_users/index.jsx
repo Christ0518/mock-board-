@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import styles from "./css/styles.module.css";
+import { Fetch_to } from "../../utilities";
+import api_link from "../../config/api_links/links.json";
 
-export default function ManageUsers() {
+export default function ManageUsers({ email }) {
   const router = useRouter();
   const [adminData, setAdminData] = useState({ name: "", email: "" });
   const [activeSection, setActiveSection] = useState("manageUsers");
+  const [UserData, setUserData] = useState([]);
 
   const adminMenuItems = [
     { id: "adminHome", label: "Dashboard", dir: "/admin" },
@@ -24,7 +26,16 @@ export default function ManageUsers() {
     const currentSection =
       adminMenuItems.find((i) => i.dir === path)?.id || "manageUsers";
     setActiveSection(currentSection);
-  }, []);
+
+    const RetrieveUserData = async () => {
+        const response = await Fetch_to(api_link.admin.retrieve_user_assign_by, { email: email });
+        if (response.success) {
+            setUserData(response.data.message);
+        }
+    };
+    RetrieveUserData();
+
+  }, [email]);
 
   return (
     <div className={styles.dashboardContainer}>
@@ -76,7 +87,7 @@ export default function ManageUsers() {
         {/* MOCK BOARD EXAMINEES LIST */}
         <div className={styles.content}>
           <h2 className={styles.sectionTitle}>Manage Users</h2>
-          <p className={styles.breadcrumb}>User login history</p>
+          <p className={styles.breadcrumb}>Student Status</p>
 
           {/* Search + Add Button */}
           <div className={styles.topBar}>
@@ -88,9 +99,9 @@ export default function ManageUsers() {
 
             <button
               className={styles.addButton}
-              onClick={() => router.push("/manage_users/create")}
+              onClick={() => router.push("/add_examinee")}
             >
-              + Add Examinee
+              + Assign Examinee
             </button>
           </div>
 
@@ -101,8 +112,8 @@ export default function ManageUsers() {
                 <tr>
                   <th></th>
                   <th>Examinee Name</th>
-                  <th>Exam Name</th>
-                  <th>Exam Type</th>
+                  <th>Exam Title</th>
+                  <th>Items</th>
                   <th>Status</th>
                   <th>Score</th>
                   <th>Date Taken</th>
@@ -115,13 +126,6 @@ export default function ManageUsers() {
                   <td><input type="checkbox" /></td>
 
                   <td className={styles.studentCell}>
-                    <Image
-                      src="/student1.png"
-                      alt="Examinee"
-                      width={35}
-                      height={35}
-                      className={styles.studentAvatar}
-                    />
                     <span>John Doe</span>
                   </td>
 
