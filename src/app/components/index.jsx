@@ -8,4 +8,5 @@ export { default as Admin_page } from './admin_page';
 export { default as Manage_users } from './manage_users';
 export { default as Manage_exams } from './manage_exams';
 export { default as Form } from './form';
+export { default as Add_examinee } from './add_examinee';
 
