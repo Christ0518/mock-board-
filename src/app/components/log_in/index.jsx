@@ -6,7 +6,7 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Fetch_to } from '../../utilities';
 import api_link from "../../config/api_links/links.json";
 
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
 
 export default function LogIn() {
   const router = useRouter();
@@ -56,37 +56,12 @@ export default function LogIn() {
         </div>
         <h1 className={styles.title}>Welcome Back</h1>
         
-        {/* Google Login Button */}
-        <div className={styles.googleLogin}>
-          <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-            {typeof window !== 'undefined' && (
-              <GoogleLogin
-                onSuccess={async (response) => {
-                  try {
-                    await handleGoogleSuccess(response);
-                    router.push('/dashboard');
-                  } catch (error) {
-                    console.error('Google login failed:', error);
-                    alert('Login failed. Please try again.');
-                  }
-                }}
-                onError={(err) => {
-                  // Handle FedCM AbortError and other errors gracefully
-                  console.error('Google Login Failed', err);
-                  if (err && err.error && err.error === 'idpiframe_initialization_failed') {
-                    alert('Google Sign-in not available in this browser. Please try a different browser.');
-                  } else {
-                    alert('Google login failed. Please try again.');
-                  }
-                }}
-              />
-            )}
-          </GoogleOAuthProvider>
-        </div>
+        
+       
+               
+                
 
-        <div className={styles.divider}>
-          <span>Or</span>
-        </div>
+      
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>

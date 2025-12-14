@@ -6,10 +6,10 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
   background-image: linear-gradient(
-      rgba(102, 126, 234, 0.7),
-      rgba(118, 75, 162, 0.7)
+      rgba(30, 64, 175, 0.7),
+      rgba(59, 130, 246, 0.7)
     ),
     url('/bg2.png');
   background-size: cover;
@@ -81,7 +81,7 @@
 .divider::after {
   content: '';
   flex: 1;
-  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+  border-bottom: 2px solid rgba(30, 64, 175, 0.2);
 }
 
 .divider span {
@@ -110,7 +110,7 @@
   font-size: 2.5rem;
   font-weight: 800;
   margin-bottom: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -127,7 +127,7 @@
   transform: translateX(-50%);
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: linear-gradient(90deg, #1e40af, #3b82f6);
   border-radius: 2px;
 }
 
@@ -155,7 +155,7 @@
 
 .inputGroup input {
   padding: 1rem 1.25rem;
-  border: 2px solid rgba(102, 126, 234, 0.2);
+  border: 2px solid rgba(30, 64, 175, 0.2);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
@@ -167,8 +167,8 @@
 .inputGroup input:focus {
   outline: none;
   background: #ffffff;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 4px 12px rgba(102, 126, 234, 0.15);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(59, 130, 246, 0.2);
   transform: translateY(-1px);
 }
 
@@ -178,7 +178,7 @@
 
 /* 🔹 Submit Button */
 .submitButton {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
   color: white;
   padding: 1rem 2rem;
   border: none;
@@ -188,7 +188,7 @@
   font-weight: 700;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
   margin-top: 1rem;
   position: relative;
   overflow: hidden;
@@ -211,12 +211,12 @@
 
 .submitButton:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 8px 25px rgba(30, 64, 175, 0.5);
 }
 
 .submitButton:active {
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
 }
 
 /* 🔹 Switch Text and Link */
@@ -232,7 +232,7 @@
 }
 
 .switchLink {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

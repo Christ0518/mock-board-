@@ -417,3 +417,179 @@
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
 }
+
+/* ========== INSTRUCTION BOX ========== */
+.instructionBox {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  margin: 2.5rem auto;
+  max-width: 900px;
+  box-shadow: 0 8px 25px rgba(30, 64, 175, 0.12);
+  border: 2px solid rgba(30, 64, 175, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.instructionBox::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+}
+
+.instructionHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(30, 64, 175, 0.1);
+}
+
+.instructionIcon {
+  width: 40px;
+  height: 40px;
+  color: #3b82f6;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.instructionHeader h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.instructionContent {
+  padding: 0.5rem 0;
+}
+
+.instructionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.instructionList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.instructionList li:hover {
+  background: rgba(219, 234, 254, 0.3);
+  border-left-color: #3b82f6;
+  transform: translateX(8px);
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.08);
+}
+
+.instructionNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+}
+
+.instructionList li div {
+  flex: 1;
+  color: #334155;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.instructionList li strong {
+  color: #1e40af;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.instructionNote {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%);
+  border-radius: 12px;
+  border-left: 5px solid #3b82f6;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.instructionNote svg {
+  width: 28px;
+  height: 28px;
+  color: #1e40af;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.instructionNote p {
+  margin: 0;
+  color: #1e3a8a;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.instructionNote strong {
+  color: #1e40af;
+  font-weight: 700;
+}
+
+/* Responsive Design for Instruction Box */
+@media (max-width: 768px) {
+  .instructionBox {
+    padding: 1.5rem;
+    margin: 1.5rem 1rem;
+  }
+
+  .instructionHeader h3 {
+    font-size: 1.5rem;
+  }
+
+  .instructionIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .instructionList li {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .instructionNumber {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .instructionNote {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
