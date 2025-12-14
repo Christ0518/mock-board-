@@ -27,7 +27,7 @@ export default async function Fetch_to(
 			console.log(data?.error);
 			return { success: false, message: data?.error || `Request failed: ${response.status}` };
 		}
-		} catch (errn) {
+		} catch (err) {
 		let message = "Unknown fetch error";
 		if (err instanceof Error) message = err.message;
 		console.error(`Attempt ${attempt} fetch error:`, message);

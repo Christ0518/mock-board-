@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "./css/styles.module.css";
+import api_link from "../../config/api_links/links.json";
+import { Fetch_to } from "../../utilities";
 
 export default function AvailableExams({ email }) {
   const router = useRouter();
   const [userData, setUserData] = useState({ name: '', email: '' });
   const [activeSection, setActiveSection] = useState("exam");
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     // Get user data
@@ -20,6 +23,15 @@ export default function AvailableExams({ email }) {
     } catch (error) {
       console.error('Error loading user data:', error);
     }
+
+    const RetrieveData = async () => {
+        const response = await Fetch_to(api_link.user_data.retrieve_mock_exam, { email: email });
+        if (response.success) {
+            setData(response.data.message);
+        }
+    };
+    RetrieveData();
+
   }, []);
 
   const menuItems = [
@@ -95,7 +107,6 @@ export default function AvailableExams({ email }) {
           </div>
 
           <div className={styles.examSection}>
-            <h2>Choose Your Exam</h2>
             <div className={styles.examGrid}>
               {exams.map((exam, index) => (
                 <div key={index} className={styles.card}>

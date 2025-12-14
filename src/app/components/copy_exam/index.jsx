@@ -1,56 +1,31 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import styles from "./css/styles.module.css";
+import { Fetch_to } from "../../utilities";
+import api_link from "../../config/api_links/links.json";
 
-export default function PartExam() {
+export default function PartExam({ email }) {
   const router = useRouter();
-  const [userData, setUserData] = useState({ name: '', email: '' });
-  const [activeSection, setActiveSection] = useState("part_exam");
+  const [subjects, setSubjects] = useState([]);
+  const [statusParts, setStatusParts] = useState([]);
 
   useEffect(() => {
     // Get user data
-    try {
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        setUserData(JSON.parse(userStr));
-      }
-    } catch (error) {
-      console.error('Error loading user data:', error);
-    }
-  }, []);
+    const RetrieveData = async () => {
+        const response = await Fetch_to(api_link.user_data.retrieve_mock_exam, { email: email });
+        if (response.success) {
 
+            console.log(statusParts)
 
+            setStatusParts(response.data.message2);
 
- 
-  const subjects = [
-    {
-      title: "Library Organization & Management",
-      desc: "PART 1 TEST.",
-    },
-    {
-      title: "Reference, Bibliography & User Services",
-      desc: "PART 2 TEST.",
-    },
-    {
-      title: "Indexing & Abstracting",
-      desc: "PART 3 TEST.",
-    },
-    {
-      title: "Cataloging & Classification",
-      desc: "PART 4 TEST.",
-    },
-    {
-      title: "Selection & Acquisition",
-      desc: "PART 5 TEST.",
-    },
-    {
-      title: "Information Technology",
-      desc: "PART 6 TEST.",
-    },
-  ];
+            setSubjects(response.data.message);
+        }
+    };
+    RetrieveData();
+  }, [email]);
 
   return (
     <div className={styles.dashboardContainer}>
@@ -73,21 +48,53 @@ export default function PartExam() {
 
           {/* Subject Grid */}
           <div className={styles.subjectGrid}>
-            {subjects.map((item, index) => (
-              <div key={index} className={styles.subjectCard}>
-                <h3 className={styles.cardTitle}>{item.title}</h3>
-                <p className={styles.cardDesc}>{item.desc}</p>
-                {/* If this is the Library Organization subject, add a Begin Test button */}
-                {item.title.toLowerCase().includes('library organization') && (
+            {subjects.map((item, index) => {
+              // Check if previous part exists and if it was failed
+              const currentPart = Number(item.parts);
+              const previousPart = currentPart - 1;
+              
+              // Find the status of the previous part
+              const previousPartStatus = statusParts.find(
+                status => Number(status.parts) === previousPart
+              );
+              
+              // Disable button if:
+              // 1. Previous part exists and was failed, OR
+              // 2. Previous part exists but hasn't been taken yet (not in statusParts)
+              const isDisabled = previousPart > 0 && 
+                                 (!previousPartStatus || previousPartStatus.status === 'Failed');
+              
+              return (
+                <div key={index} className={styles.subjectCard}>
+                  <h3 className={styles.cardTitle}>{item.exam_title}</h3>
+                  <p className={styles.cardDesc}> Part {item.parts} </p>
+                  
+                  {isDisabled && (
+                    <p style={{ color: '#F44336', fontSize: '0.9rem', marginTop: '10px' }}>
+                      Complete Part {previousPart} first
+                    </p>
+                  )}
+                  
                   <button
                     className={styles.beginBtn}
-                    onClick={() => router.push('/part_exam/library-organization')}
+                    disabled={isDisabled}
+                    style={isDisabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                    onClick={() => {
+                      if (isDisabled) return;
+                      localStorage.setItem("exam_id", item.id);
+                      localStorage.setItem("assign_time", item.duration);
+                      localStorage.setItem("assign_by", item.email);
+                      localStorage.setItem("passing_score", item.passing_score || 75);
+                      localStorage.setItem("exam_title", item.exam_title);
+                      localStorage.setItem("parts", item.parts);
+                      router.push('/part_exam/library-organization')
+                    }}
                   >
-                    Begin Test
+                    {isDisabled ? 'Locked' : 'Begin Test'}
                   </button>
-                )}
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       </main>

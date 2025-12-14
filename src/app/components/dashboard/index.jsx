@@ -4,11 +4,13 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './css/styles.module.css';
 import Fetch_to from '../../utilities/Fetch_to';
+import api_link from "../../config/api_links/links.json";
 
 export default function Dashboard({ email }) {
   const router = useRouter();
   const [userData, setUserData] = useState({ name: '', email: '' });
   const [activeSection, setActiveSection] = useState('home');
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     // Get user data
@@ -25,7 +27,17 @@ export default function Dashboard({ email }) {
     const path = window.location.pathname;
     const currentSection = menuItems.find(item => item.dir === path)?.id || 'home';
     setActiveSection(currentSection);
-  }, []);
+
+    const RetrieveData = async () => {
+        const response = await Fetch_to(api_link.user_data.retrieve_mock_exam, { email: email });
+        if (response.success) {
+            console.log(response.data)
+            setData(response.data);
+        }
+    };
+    RetrieveData();
+
+  }, [email]);
 
    const menuItems = [
     { id: 'home', label: 'Home', dir: '/dashboard' },
@@ -106,19 +118,11 @@ export default function Dashboard({ email }) {
             <div className={styles.statsGrid}>
               <div className={styles.statsCard}>
                 <h3>Mock Exams Completed</h3>
-                <p className={styles.statNumber}>12</p>
+                <p className={styles.statNumber}> {data.message2 ? data.message2.length : 0} </p>
               </div>
               <div className={styles.statsCard}>
-                <h3>Average Score</h3>
-                <p className={styles.statNumber}>85%</p>
-              </div>
-              <div className={styles.statsCard}>
-                <h3>Study Hours</h3>
-                <p className={styles.statNumber}>48</p>
-              </div>
-              <div className={styles.statsCard}>
-                <h3>Days Until Exam</h3>
-                <p className={styles.statNumber}>30</p>
+                <h3>Mock Exam Assigned</h3>
+                <p className={styles.statNumber}> {data.message ? data.message.length : 0} </p>
               </div>
             </div>
 

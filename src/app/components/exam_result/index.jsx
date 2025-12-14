@@ -130,8 +130,8 @@ export default function ExamResult({ email }) {
                       color: user.status === "queu" || "underprocess" ? "#92400e" : ""
                     }} 
                       > {data.score} </span></td>
-
-                   
+                    <td> {data.passing_score} </td>
+                   <td> {data.status} </td>
                   </tr>
                   ))
                 ) : (

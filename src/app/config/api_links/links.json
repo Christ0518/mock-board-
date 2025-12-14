@@ -16,5 +16,12 @@
         "assigned" : "/services/supabase/admin/assigned",
         "unassigned" : "/services/supabase/admin/unassigned",
         "exam_result" : "/services/supabase/admin/exam_result"
-    }
+    },
+    "user_data" : {
+        "questionare" : "/services/api/response_to_python",
+        "retrieve_mock_exam" : "/services/supabase/user/retrieve_mock_exam",
+        "update_score" : "/services/supabase/user/update_score"
+    },
+    "python_response" : "http://127.0.0.1:10000/"
+
 }

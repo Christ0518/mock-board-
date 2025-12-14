@@ -13,7 +13,7 @@ export default function AdminPage() {
           async function check() {
               const response = await Fetch_to("/services/jwt/verify");
               if (!response.success) return router.push("/");
-              setEmail(response.data.message.email);
+              setEmail(response.data.message.data[0].email);
           }
           check();
       }, []);
