@@ -77,7 +77,7 @@ export default function ExamResult({ email }) {
               className={styles.logoutBtn}
               onClick={() => {
                 localStorage.removeItem("admin");
-                router.push("/log_in");
+                router.push("/login");
               }}
             >
               Logout
