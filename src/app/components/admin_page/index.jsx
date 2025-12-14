@@ -11,12 +11,13 @@ export default function AdminDashboard({ email }) {
   const [activeSection, setActiveSection] = useState("adminHome");
   const [data, setData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [examData, setExamData] = useState([]);
 
   const adminMenuItems = [
     { id: "adminHome", label: "Dashboard", dir: "/admin" },
     { id: "manageUsers", label: "Manage Users", dir: "/manage_users" },
     { id: "manageExams", label: "Manage Exams", dir: "/manage_exams" },
-    
+    { id: "examResult", label: "Exam Result", dir: "/exam_result" },
   ];
 
   useEffect(() => {
@@ -44,6 +45,14 @@ export default function AdminDashboard({ email }) {
         }
     };
     RetrieveData();
+
+    const RetrieveExamData = async () => {
+        const response = await Fetch_to(api_link.admin.exam_result, { email: email });
+        if (response.success) {
+            setExamData(response.data.message);
+        }
+    };
+    RetrieveExamData();
 
     // Detect active page
     const path = window.location.pathname;
@@ -123,7 +132,7 @@ export default function AdminDashboard({ email }) {
 
               <div className={styles.statsCard}>
                 <h3>Completed Exam Sessions</h3>
-                <p className={styles.statNumber}> 0 </p>
+                <p className={styles.statNumber}> {examData ? examData.length : 0} </p>
               </div>                                            
             </div>
 

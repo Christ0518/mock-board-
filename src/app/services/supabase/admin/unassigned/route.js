@@ -3,16 +3,14 @@ import { supabaseServer } from "../../../../lib/supabase_server";
 
 export async function POST(req) {
     
-    const { id, email } = await req.json();
+    const { email } = await req.json();
 
-    if(!id || !email) return NextResponse.json({ success: false, error: "Some requirements is conflicted" }, { status: 409 });
-
-    const que = "queu";
+    if (!email) return NextResponse.json({ success: false, message: "Email not found" }, { status: 409 });
 
     const { error } = await supabaseServer
     .from("auth")
-    .update({ assign_by: email, status: que })
-    .eq("id", id);
+    .update({ assign_by: null })
+    .eq("email", email);
 
     if (error) {
         console.error("Supabase Query Error: ", error);

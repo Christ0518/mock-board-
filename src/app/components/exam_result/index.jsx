@@ -1,17 +1,16 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./css/styles.module.css";
 import { Fetch_to } from "../../utilities";
 import api_link from "../../config/api_links/links.json";
 
-export default function ManageUsers({ email }) {
+export default function ExamResult({ email }) {
   const router = useRouter();
   const [adminData, setAdminData] = useState({ name: "", email: "" });
   const [activeSection, setActiveSection] = useState("manageUsers");
   const [data, setData] = useState([]);
-
 
   const adminMenuItems = [
     { id: "adminHome", label: "Dashboard", dir: "/admin" },
@@ -30,14 +29,14 @@ export default function ManageUsers({ email }) {
     setActiveSection(currentSection);
 
     const RetrieveUserData = async () => {
-        const response = await Fetch_to(api_link.admin.retrieve_all_user);
+        const response = await Fetch_to(api_link.admin.exam_result, { email: email });
         if (response.success) {
             setData(response.data.message);
         }
     };
     RetrieveUserData();
 
-  }, []);
+  }, [email]);
 
   return (
     <div className={styles.dashboardContainer}>
@@ -88,8 +87,8 @@ export default function ManageUsers({ email }) {
 
         {/* MOCK BOARD EXAMINEES LIST */}
         <div className={styles.content}>
-          <h2 className={styles.sectionTitle}>Assign Examinee</h2>
-          <p className={styles.breadcrumb}>Student</p>
+          <h2 className={styles.sectionTitle}>Exam Result</h2>
+          <p className={styles.breadcrumb}>Result</p>
 
           {/* Search + Add Button */}
           <div className={styles.topBar}>
@@ -98,13 +97,6 @@ export default function ManageUsers({ email }) {
               placeholder="Search by name or exam"
               className={styles.searchInput}
             />
-
-            <button
-              className={styles.addButton}
-              onClick={() => router.push("/manage_users")}
-            >
-              Manage Users
-            </button>
           </div>
 
           {/* Examinees Table */}
@@ -112,51 +104,39 @@ export default function ManageUsers({ email }) {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th></th>
                   <th>Examinee Name</th>
-                  <th>Email</th>
-                  <th>Type</th>
-                  <th>Action</th>
+                  <th>Exam Title</th>
+                  <th>Parts</th>
+                  <th>Score</th>
+                  <th>Passing Score</th>
+                  <th>Status</th>
                 </tr>
               </thead>
 
               <tbody>
 
                 {data && data.length > 0 ? (
-                  data.map((user, index) => (
+                  data.map((data, index) => (
                     <tr key={index}>
-                      <td><input type="checkbox" /></td>
 
-                      <td className={styles.studentCell}>
-                        <span> {user.name} </span>
-                      </td>
-                      
-                      <td> {user.email} </td>
-                      <td><span className={styles.published}> {user.role} </span></td>
+                    <td className={styles.studentCell}>
+                      <span> {data.examinee_name} </span>
+                    </td>
+                    
+                    <td> {data.exam_title} </td>
+                    <td> Part {data.parts} </td>
+                    <td><span className={styles.published} style={{ 
+                      backgroundColor: user.status === "queu" || "underprocess" ? "#fef3c7" : "",
+                      color: user.status === "queu" || "underprocess" ? "#92400e" : ""
+                    }} 
+                      > {data.score} </span></td>
 
-                      <td className={styles.actionBtns}>
-                        <button
-                          className={styles.viewBtn}
-                          onClick={ async() => {
-
-                            const response = await Fetch_to(api_link.admin.assigned, { id: user.id, email: email });
-
-                            if (response.success) {
-                              alert("User Assign", user.name, " to ", email);
-                              window.location.reload();
-                            }
-
-                          }}
-                        >
-                          Assign
-                        </button>
-                      </td>
-                    </tr>
-
+                   
+                  </tr>
                   ))
                 ) : (
-                  <tr> 
-                    <td></td>
+                  <tr>
+                    <td> </td>
                   </tr>
                 )}
 

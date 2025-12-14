@@ -481,6 +481,34 @@
   border-color: #cbd5e0;
 }
 
+.select {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #2d3748;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.select:focus {
+  outline: none;
+  border-color: #1e40af;
+  box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+  transform: translateY(-2px);
+}
+
+.select::placeholder {
+  color: #a0aec0;
+}
+
+.select:hover {
+  border-color: #cbd5e0;
+}
+
+
 /* Upload Section */
 .uploadSection {
   display: flex;

@@ -11,7 +11,7 @@ export default function Form ({ email }) {
   const router = useRouter();
   const fileRef = useRef(null);
   const [excelFile, setExcelFile] = useState(null);
-  const [adminData, setAdminData] = useState({ name: "", email: email || "", duration: "" });
+  const [adminData, setAdminData] = useState({ name: "", email: email || "", duration: "", parts: "" });
   const [loading, setLoading] = useState(false);
   const [fileName, setFileName] = useState("");
   const [rowCount, setRowCount] = useState(0);
@@ -76,7 +76,8 @@ export default function Form ({ email }) {
             email: adminData.email, 
             items: rowCount, 
             duration: adminData.duration,
-            name: adminData.name
+            name: adminData.name,
+            parts: adminData.parts
           }); 
 
           Swal.close();
@@ -88,7 +89,7 @@ export default function Form ({ email }) {
               setRowCount(0);
               setAdminData(prev => ({
                 ...prev,
-                name: "", duration: ""
+                name: "", duration: "", parts: ""
               }));
           } else {
               SweetAlert2("Error", response.message || "Upload failed", "error", true, "Confirm");
@@ -137,6 +138,24 @@ export default function Form ({ email }) {
                 id="duration"
                 name="duration"
                 value={adminData.duration}
+                onChange={handleInputChange}
+                placeholder="60"
+                min="1"
+                className={styles.input}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.label} htmlFor="parts">
+                <span className={styles.labelIcon}>📂</span>
+                Parts
+              </label>
+              <input
+                type="number"
+                id="parts"
+                name="parts"
+                value={adminData.parts}
                 onChange={handleInputChange}
                 placeholder="60"
                 min="1"

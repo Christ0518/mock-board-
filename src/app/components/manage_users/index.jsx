@@ -10,12 +10,13 @@ export default function ManageUsers({ email }) {
   const router = useRouter();
   const [adminData, setAdminData] = useState({ name: "", email: "" });
   const [activeSection, setActiveSection] = useState("manageUsers");
-  const [UserData, setUserData] = useState([]);
+  const [userData, setUserData] = useState([]);
 
   const adminMenuItems = [
     { id: "adminHome", label: "Dashboard", dir: "/admin" },
     { id: "manageUsers", label: "Manage Users", dir: "/manage_users" },
     { id: "manageExams", label: "Manage Exams", dir: "/manage_exams" },
+    { id: "examResult", label: "Exam Result", dir: "/exam_result" },
   ];
 
   useEffect(() => {
@@ -110,41 +111,53 @@ export default function ManageUsers({ email }) {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th></th>
                   <th>Examinee Name</th>
-                  <th>Exam Title</th>
-                  <th>Items</th>
                   <th>Status</th>
-                  <th>Score</th>
-                  <th>Date Taken</th>
                   <th>Action</th>
                 </tr>
               </thead>
 
               <tbody>
-                <tr>
-                  <td><input type="checkbox" /></td>
 
-                  <td className={styles.studentCell}>
-                    <span>John Doe</span>
-                  </td>
+                {userData && userData.length > 0 ? (
+                  userData.map((user, index) => (
+                    <tr key={index}>
 
-                  <td>General Education Mock</td>
-                  <td>General Education</td>
-                  <td><span className={styles.published}>Completed</span></td>
-                  <td>85%</td>
-                  <td>2025-01-15</td>
+                    <td className={styles.studentCell}>
+                      <span> {user.name} </span>
+                    </td>
+                    <td><span className={styles.published} style={{ 
+                      backgroundColor: user.status === "queu" || "underprocess" ? "#fef3c7" : "",
+                      color: user.status === "queu" || "underprocess" ? "#92400e" : ""
+                    }} 
+                      > {user.status} </span></td>
 
-                  <td className={styles.actionBtns}>
-                    <button
-                      className={styles.viewBtn}
-                      onClick={() => router.push("/manage_users/view/1")}
-                    >
-                      View
-                    </button>
-                    <button className={styles.deleteIcon}>🗑️</button>
-                  </td>
-                </tr>
+                    <td className={styles.actionBtns}>
+                      <button
+                        className={styles.viewBtn}
+                        onClick={ async () => {
+
+                          const response = await Fetch_to(api_link.admin.unassigned, { email: user.email });
+
+                          if (response.success) {
+                            alert("User Successfully Unassigned");
+                            window.location.reload();
+                          }
+
+                        }}
+                      >
+                        Unassigned
+                      </button>
+                    </td>
+                  </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td> </td>
+                  </tr>
+                )}
+
+                
 
               </tbody>
             </table>

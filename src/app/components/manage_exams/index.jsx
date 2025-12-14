@@ -16,6 +16,7 @@ export default function ManageExams({ email }) {
     { id: "adminHome", label: "Dashboard", dir: "/admin" },
     { id: "manageUsers", label: "Manage Users", dir: "/manage_users" },
     { id: "manageExams", label: "Manage Exams", dir: "/manage_exams" },
+    { id: "examResult", label: "Exam Result", dir: "/exam_result" },
   ];
 
   useEffect(() => {
@@ -117,6 +118,7 @@ export default function ManageExams({ email }) {
       <thead>
         <tr>
           <th>Exam Title</th>
+          <th>Parts</th>
           <th>Items</th>
           <th>Duration</th>
           <th>Date Created</th>
@@ -129,6 +131,7 @@ export default function ManageExams({ email }) {
           data.map((excel, index) => (
             <tr key={index}>
               <td> {excel.exam_title} </td>
+              <td> part {excel.parts} </td>
               <td> {excel.items} </td>
               <td> {excel.duration} min </td>
               <td> {new Date(excel.created_at).toLocaleDateString("en-US")} </td>

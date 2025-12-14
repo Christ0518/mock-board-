@@ -11,7 +11,7 @@ export async function POST(req) {
 
     const { data, error } = await supabaseServer
     .from("storage")
-    .select("id, file_dir, exam_title, items, duration, created_at")
+    .select("id, file_dir, exam_title, items, duration, created_at, parts")
     .eq("email", cleanEmail);
 
     if (error) {
