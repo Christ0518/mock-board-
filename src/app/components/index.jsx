@@ -10,3 +10,4 @@ export { default as Manage_exams } from './manage_exams';
 export { default as Form } from './form';
 export { default as Add_examinee } from './add_examinee';
 export { default as ExamResult } from "./exam_result";
+export { default as ResultTest } from "./result_test";

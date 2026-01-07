@@ -42,6 +42,43 @@ function QuizPage() {
 
   const question = questionare[index];
 
+  useEffect(() => {
+  async function check() {
+    const response = await Fetch_to("/services/jwt/verify");
+    if (!response.success) return router.push("/");
+
+    // 🚫 Prevent restart if exam already submitted
+    if (localStorage.getItem('exam_submitted') === 'true') {
+      alert('You have already completed this exam.');
+      return router.push('/dashboard');
+    }
+
+    // 🔒 Lock exam as active
+    if (!localStorage.getItem('exam_active')) {
+      localStorage.setItem('exam_active', 'true');
+    }
+
+    const email = response.data.message.data[0].email;
+    const assign_by = localStorage.getItem('assign_by') || '';
+    const passing_score = localStorage.getItem('passing_score');
+    const exam_title = localStorage.getItem('exam_title');
+    const parts = localStorage.getItem('parts');
+
+    setData(prev => ({
+      ...prev,
+      examinee_name: response.data.message.data[0].name,
+      email,
+      assign_by,
+      exam_title,
+      parts,
+      passing_score: parseInt(passing_score)
+    }));
+  }
+
+  check();
+}, []);
+
+
   // Fetch questionnaire data
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -68,10 +105,12 @@ function QuizPage() {
           
         
         } else {
-          console.error('Failed to fetch questions:', response.message);
+          console.error('Failed to fetch questions:', response.data?.error || response.message || 'Unknown error');
+          alert('Failed to load exam questions. Please ensure the exam file is uploaded and the server is running.');
         }
       } catch (error) {
         console.error('Error fetching questions:', error);
+        alert('An error occurred while loading the exam. Please try again later.');
       }
     };
 

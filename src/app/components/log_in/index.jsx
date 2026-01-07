@@ -39,7 +39,7 @@ export default function LogIn() {
         router.push('/dashboard');
       }
     } else {
-      alert(data?.message || 'Login failed. Please try again.');
+      alert(response?.data?.message || 'Login failed. Please try again.');
     }
   };
 

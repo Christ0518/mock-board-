@@ -38,6 +38,7 @@ export default function AvailableExams({ email }) {
     { id: "home", label: "Home", dir: "/dashboard" },
     { id: "about", label: "About", dir: "/about" },
     { id: "exam", label: "Exam", dir: "/exam" },
+     { id: "testResult", label: "Test Result", dir: "/test_result" },
    
   ];
 

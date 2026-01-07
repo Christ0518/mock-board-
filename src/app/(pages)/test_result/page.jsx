@@ -1,10 +1,10 @@
 'use client';
-import { ExamResult } from '../../components';
+import { ResultTest } from '../../components';
 import { useState, useEffect } from 'react';
 import { Fetch_to } from "../../utilities";
 import { useRouter } from 'next/navigation';
 
-export default function ManageUsersPage() {
+export default function TestResultPage() {
 
   const router = useRouter();
   const [email, setEmail] = useState();
@@ -18,5 +18,5 @@ export default function ManageUsersPage() {
           check();
       }, []);
 
-  return <ExamResult email={email} />;
+  return <ResultTest email={email} />;
 }
