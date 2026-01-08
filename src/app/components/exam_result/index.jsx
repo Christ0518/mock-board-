@@ -17,8 +17,6 @@ export default function ExamResult({ email }) {
     { id: "manageUsers", label: "Manage Users", dir: "/manage_users" },
     { id: "manageExams", label: "Manage Exams", dir: "/manage_exams" },
      { id: "examResult", label: "Exam Result", dir: "/exam_result" },
-    { id: "reviewer", label: "Test Reviewer", dir: "/reviewer" },
-
   ];
 
   useEffect(() => {
@@ -112,6 +110,7 @@ export default function ExamResult({ email }) {
                   <th>Score</th>
                   <th>Passing Score</th>
                   <th>Status</th>
+                  <th>Category</th>
                 </tr>
               </thead>
 
@@ -128,12 +127,12 @@ export default function ExamResult({ email }) {
                     <td> {data.exam_title} </td>
                     <td> Part {data.parts} </td>
                     <td><span className={styles.published} style={{ 
-                      backgroundColor: user.status === "queu" || "underprocess" ? "#fef3c7" : "",
-                      color: user.status === "queu" || "underprocess" ? "#92400e" : ""
+                      color: "#92400e"
                     }} 
                       > {data.score} </span></td>
                     <td> {data.passing_score} </td>
                    <td> {data.status} </td>
+                   <td> {data.category} </td>
                   </tr>
                   ))
                 ) : (

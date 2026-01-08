@@ -20,6 +20,8 @@
     "user_data" : {
         "questionare" : "/services/api/response_to_python",
         "retrieve_mock_exam" : "/services/supabase/user/retrieve_mock_exam",
+        "retrieve_mock_exam_reviewer" : "/services/supabase/user/retrieve_mock_exam_reviewer",
+        "exam_result" : "/services/supabase/user/exam_result",
         "update_score" : "/services/supabase/user/update_score"
     },
     "python_response" : "http://127.0.0.1:10000/"

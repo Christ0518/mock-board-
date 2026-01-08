@@ -7,7 +7,7 @@ import styles from "./css/styles.module.css";
 import api_link from "../../config/api_links/links.json";
 import { Fetch_to } from "../../utilities";
 
-export default function reviewer({ email }) {
+export default function Reviewer({ email }) {
   const router = useRouter();
   const [userData, setUserData] = useState({ name: '', email: '' });
   const [activeSection, setActiveSection] = useState("reviewer");
@@ -178,7 +178,7 @@ However, once you click “Submit”, you will not be able to return to the exam
                   <p>Click to begin review</p>
                   <button
                     className={styles.beginBtn}
-                    onClick={() => router.push('/part_exam')}
+                    onClick={() => router.push('/part_exam_review')}
                     aria-label={`Begin review for ${exam.title}`}
                   >
                     Begin Review

@@ -7,30 +7,30 @@ export async function POST(req) {
 
     if (!email) return NextResponse.json({ success: false, error: "Email not found" }, { status: 409 });
 
-    const { data, error } = await supabaseServer
+    const { data: authData, error: authError } = await supabaseServer
     .from("auth")
     .select("*")
     .eq("email", email);
 
-    if (error) {
-        console.error("Supabase Query Error: ", error);
+    if (authError) {
+        console.error("Supabase Query Error (auth): ", authError);
         return NextResponse.json({ success: false, error: "Something went wrong" }, { status: 500 });
     }
 
-    const { data: result_log , error: Error } = await supabaseServer
+    const { data: result_log , error: examRecordError } = await supabaseServer
     .from("exam_record")
     .select("*")
     .eq("email", email);
 
-    if (Error) {
-        console.error("Supabase Query Error: ", Error);
+    if (examRecordError) {
+        console.error("Supabase Query Error (exam_record): ", examRecordError);
         return NextResponse.json({ success: false, error: "Something went wrong" }, { status: 500 });
     }
 
-    const filterAssign_by = data?.filter((user) => user.assign_by !== null);
+    const filterAssign_by = authData?.filter((user) => user.assign_by !== null);
 
     if (filterAssign_by && filterAssign_by.length > 0) {
-
+    
         const assignedEmail = filterAssign_by[0].assign_by;
 
         const { data: storageData, error: storageError } = await supabaseServer
@@ -48,7 +48,7 @@ export async function POST(req) {
         }
 
         // There may be multiple storage rows — find those with category 'reviewer'
-        const reviewerRows = storageData.filter((r) => r.category === "exam");
+        const reviewerRows = storageData.filter((r) => r.category === "reviewer");
 
         if (reviewerRows.length > 0) {
             return NextResponse.json({ success: true, message: reviewerRows, message2: result_log }, { status: 200 });

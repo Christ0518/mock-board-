@@ -8,7 +8,7 @@ import api_link from "../../config/api_links/links.json";
 
 export default function ResultTest({ email }) {
   const router = useRouter();
-  const [userData, setUserData] = useState({ name: "", email: "" });
+  const [userData, setUserData] = useState({ name: "", email: email || "" });
   const [activeSection, setActiveSection] = useState("test_result");
   const [data, setData] = useState([]);
   const [expandedRow, setExpandedRow] = useState(null);
@@ -22,9 +22,24 @@ export default function ResultTest({ email }) {
 
   ];
 
+  useEffect(() => {
 
-  
+    setUserData(prev => ({ ...prev, email: email }));
 
+    const FetchData = async() => {
+
+      const response = await Fetch_to(api_link.user_data.exam_result, { email: email });
+
+      if (response.success) {
+        setData(response.data.message);
+      } 
+      
+
+    }
+
+    FetchData();
+
+  }, [email]);
 
 
   return (
@@ -92,7 +107,6 @@ export default function ResultTest({ email }) {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Examinee Name</th>
                   <th>Exam Title</th>
                   <th>Parts</th>
                   <th>Score</th>
@@ -108,9 +122,7 @@ export default function ResultTest({ email }) {
                   data.map((item, index) => (
                     <>
                       <tr key={index}>
-                        <td className={styles.studentCell}>
-                          <span> {item.examinee_name} </span>
-                        </td>
+    
                         
                         <td> {item.exam_title} </td>
                         <td> Part {item.parts} </td>
@@ -183,19 +195,15 @@ export default function ResultTest({ email }) {
 
                               <div className={styles.summarySection}>
                                 <div className={styles.summaryItem}>
-                                  <span className={styles.summaryLabel}>Total Questions:</span>
-                                  <span className={styles.summaryValue}>{item.answers?.length || 0}</span>
-                                </div>
-                                <div className={styles.summaryItem}>
                                   <span className={styles.summaryLabel}>Correct Answers:</span>
                                   <span className={`${styles.summaryValue} ${styles.correct}`}>
-                                    {item.answers?.filter(a => a.is_correct).length || 0}
+                                    {item.score}
                                   </span>
                                 </div>
                                 <div className={styles.summaryItem}>
-                                  <span className={styles.summaryLabel}>Wrong Answers:</span>
+                                  <span className={styles.summaryLabel}>Passign Score: </span>
                                   <span className={`${styles.summaryValue} ${styles.wrong}`}>
-                                    {item.answers?.filter(a => !a.is_correct).length || 0}
+                                    {item.passing_score}
                                   </span>
                                 </div>
                               </div>

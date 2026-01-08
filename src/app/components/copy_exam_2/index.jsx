@@ -14,7 +14,7 @@ export default function PartExam({ email }) {
   useEffect(() => {
     // Get user data
     const RetrieveData = async () => {
-        const response = await Fetch_to(api_link.user_data.retrieve_mock_exam, { email: email });
+        const response = await Fetch_to(api_link.user_data.retrieve_mock_exam_reviewer, { email: email });
         if (response.success) {
 
             console.log(statusParts)
@@ -34,7 +34,7 @@ export default function PartExam({ email }) {
           {/* Back Button */}
           <button 
             className={styles.backButton}
-            onClick={() => router.push('/exam')}
+            onClick={() => router.push('/reviewer')}
           >
             <span className={styles.backArrow}>←</span>
             Back to Exams
@@ -88,7 +88,7 @@ export default function PartExam({ email }) {
                       localStorage.setItem("exam_title", item.exam_title);
                       localStorage.setItem("parts", item.parts);
                       localStorage.setItem("category", item.category);
-                      router.push('/part_exam/library-organization')
+                      router.push('/part_exam_review/library-organization')
                     }}
                   >
                     {isDisabled ? 'Locked' : 'Begin Test'}

@@ -329,7 +329,7 @@ function QuizPage() {
                   localStorage.removeItem('assign_by');
                   localStorage.removeItem('assign_time');
                   localStorage.removeItem('passing_score');
-                  localStorage.removeItem('category');
+                  localStorage.removeItem("category");
                   router.push('/dashboard');
                 } else {
                   alert('Failed to submit score: ' + (response.message || 'Unknown error'));

@@ -11,7 +11,7 @@ export default function Form ({ email }) {
   const router = useRouter();
   const fileRef = useRef(null);
   const [excelFile, setExcelFile] = useState(null);
-  const [adminData, setAdminData] = useState({ name: "", email: email || "", duration: "", parts: "" });
+  const [adminData, setAdminData] = useState({ name: "", email: email || "", duration: "", parts: "", category: "" });
   const [loading, setLoading] = useState(false);
   const [fileName, setFileName] = useState("");
   const [rowCount, setRowCount] = useState(0);
@@ -77,7 +77,8 @@ export default function Form ({ email }) {
             items: rowCount, 
             duration: adminData.duration,
             name: adminData.name,
-            parts: adminData.parts
+            parts: adminData.parts,
+			category: adminData.category
           }); 
 
           Swal.close();
@@ -162,6 +163,18 @@ export default function Form ({ email }) {
                 className={styles.input}
                 required
               />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.label} htmlFor="parts">
+                <span className={styles.labelIcon}>📂</span>
+                Select Category              
+              </label>
+              <select name="category" id="category" value={adminData.category} onChange={handleInputChange} required>
+                <option value="">select</option>
+                <option value="reviewer">Reviewer</option>
+                <option value="exam">Exam</option>
+              </select>
             </div>
 
             {/* File Upload */}

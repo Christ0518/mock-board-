@@ -10,13 +10,17 @@ export async function POST(req) {
     const { data, error } = await supabaseServer
     .from("exam_record")
     .select("*")
-    .eq("assign_by", email);
+    .eq("email", email);
 
     if (error) {
         console.error("Supabase Query Error: ", error);
         return NextResponse.json({ success: false, error: "Something went wrong" }, { status: 500 });
     }
+
     console.log(data)
-    return NextResponse.json({ success: true, message: data }, { status: 200 });
+
+    const reviewerRows = data.filter((r) => r.category === "reviewer");
+
+    return NextResponse.json({ success: true, message: reviewerRows }, { status: 200 });
 
 }

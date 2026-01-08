@@ -9,6 +9,7 @@ export async function POST(req) {
     const email = form.get("email");
     const items = form.get("items");
     const parts = form.get("parts");
+    const category = form.get("category");
     const duration = form.get("duration");
 
     const cleanEmail = email.trim().toLowerCase();
@@ -50,7 +51,7 @@ export async function POST(req) {
             
             const { data, error } = await supabaseServer
             .from("storage")
-            .insert([{ file_dir: filePath, email: cleanEmail, exam_title: name, items: items, duration: duration, parts: parts }]);
+            .insert([{ file_dir: filePath, email: cleanEmail, exam_title: name, items: items, duration: duration, parts: parts, category: category }]);
 
             if (error) {
                 console.error("Supabase Query Error: ", error);
