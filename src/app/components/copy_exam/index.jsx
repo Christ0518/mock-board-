@@ -62,7 +62,7 @@ export default function PartExam({ email }) {
               // 1. Previous part exists and was failed, OR
               // 2. Previous part exists but hasn't been taken yet (not in statusParts)
               const isDisabled = previousPart > 0 && 
-                                 (!previousPartStatus || previousPartStatus.status === 'Failed');
+                                 (!previousPartStatus.status === "Passed" || previousPartStatus.status === 'Failed');
               
               return (
                 <div key={index} className={styles.subjectCard}>
