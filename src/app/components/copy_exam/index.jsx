@@ -17,7 +17,7 @@ export default function PartExam({ email }) {
         const response = await Fetch_to(api_link.user_data.retrieve_mock_exam, { email: email });
         if (response.success) {
 
-            console.log(statusParts)
+            console.log(response.data.message2)
 
             setStatusParts(response.data.message2);
 
@@ -49,20 +49,32 @@ export default function PartExam({ email }) {
           {/* Subject Grid */}
           <div className={styles.subjectGrid}>
             {subjects.map((item, index) => {
-              // Check if previous part exists and if it was failed
               const currentPart = Number(item.parts);
               const previousPart = currentPart - 1;
               
-              // Find the status of the previous part
+              // Check if current part has already been taken
+              const currentPartStatus = statusParts.find(
+                status => Number(status.parts) === currentPart
+              );
+              
+              // Check if previous part exists and was passed
               const previousPartStatus = statusParts.find(
                 status => Number(status.parts) === previousPart
               );
               
               // Disable button if:
-              // 1. Previous part exists and was failed, OR
-              // 2. Previous part exists but hasn't been taken yet (not in statusParts)
-              const isDisabled = previousPart > 0 && 
-                                 (!previousPartStatus.status === "Passed" || previousPartStatus.status === 'Failed');
+              // 1. Current part has already been taken (Passed or Failed) - no retakes
+              // 2. Previous part exists but hasn't been passed yet
+              let isDisabled = false;
+              let disabledMessage = '';
+              
+              if (currentPartStatus) {
+                isDisabled = true;
+                disabledMessage = `Already taken (${currentPartStatus.status})`;
+              } else if (previousPart > 0 && (!previousPartStatus || previousPartStatus.status?.toLowerCase() !== 'passed')) {
+                isDisabled = true;
+                disabledMessage = `Complete Part ${previousPart} first`;
+              }
               
               return (
                 <div key={index} className={styles.subjectCard}>
@@ -71,7 +83,7 @@ export default function PartExam({ email }) {
                   
                   {isDisabled && (
                     <p style={{ color: '#F44336', fontSize: '0.9rem', marginTop: '10px' }}>
-                      Complete Part {previousPart} first
+                      {disabledMessage}
                     </p>
                   )}
                   
