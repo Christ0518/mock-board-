@@ -17,26 +17,15 @@ export default function ResultTest({ email }) {
     { id: 'home', label: 'Home', dir: '/dashboard' },
     { id: 'about', label: 'About', dir: '/about' },
     { id: 'exam', label: 'Exam', dir: '/exam' },
-    { id: "testResult", label: "Test Result", dir: "/test_result" }
+    { id: "testResult", label: "Test Result", dir: "/test_result" },
+    { id: "reviewer", label: "Test Reviewer", dir: "/reviewer" },
+
   ];
 
-  useEffect(() => {
-    const userStr = localStorage.getItem("user");
-    if (userStr) setUserData(JSON.parse(userStr));
 
-    const path = window.location.pathname;
-    const currentSection =
-      menuItems.find((i) => i.dir === path)?.id || "testResult";
-    setActiveSection(currentSection);
+  
 
-    const RetrieveUserData = async () => {
-      const response = await Fetch_to(api_link.admin.Result_test, { email: email });
-      if (response.success) {
-        setData(response.data.message);
-      }
-    };
-    RetrieveUserData();
-  }, [email]);
+
 
   return (
     <div className={styles.dashboardContainer}>

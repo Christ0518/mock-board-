@@ -29,6 +29,8 @@ export default function About({ email }) {
     { id: 'about', label: 'About', dir: '/about' },
     { id: 'exam', label: 'Exam', dir: '/exam' },
    { id: "testResult", label: "Test Result", dir: "/result_test" },
+        { id: "reviewer", label: "Test Reviewer", dir: "/reviewer" },
+
     
   
   ];

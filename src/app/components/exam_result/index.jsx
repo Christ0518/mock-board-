@@ -16,6 +16,8 @@ export default function ExamResult({ email }) {
     { id: "adminHome", label: "Dashboard", dir: "/admin" },
     { id: "manageUsers", label: "Manage Users", dir: "/manage_users" },
     { id: "manageExams", label: "Manage Exams", dir: "/manage_exams" },
+     { id: "examResult", label: "Exam Result", dir: "/exam_result" },
+    { id: "reviewer", label: "Test Reviewer", dir: "/reviewer" },
 
   ];
 

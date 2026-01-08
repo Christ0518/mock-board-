@@ -90,6 +90,9 @@ function QuizPage() {
         }
 
         const response = await Fetch_to(api_link.user_data.questionare, { id: examId });
+        
+        console.log('Question fetch response:', response);
+        
         if (response.success) {
           const rawData = response.data.message.data.data || [];
           
@@ -105,12 +108,14 @@ function QuizPage() {
           
         
         } else {
-          console.error('Failed to fetch questions:', response.data?.error || response.message || 'Unknown error');
-          alert('Failed to load exam questions. Please ensure the exam file is uploaded and the server is running.');
+          const errorMsg = response.message || response.data?.error || response.error || 'Unknown error';
+          console.error('Failed to fetch questions:', errorMsg);
+          console.error('Full response object:', response);
+          alert(`Failed to load exam questions.\n\nError: ${errorMsg}\n\nPlease ensure:\n1. The exam file is uploaded to storage\n2. The Python server is running (http://127.0.0.1:10000)\n3. The exam ID is valid`);
         }
       } catch (error) {
         console.error('Error fetching questions:', error);
-        alert('An error occurred while loading the exam. Please try again later.');
+        alert(`An error occurred while loading the exam:\n\n${error.message}\n\nPlease check the console for more details.`);
       }
     };
 

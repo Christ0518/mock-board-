@@ -44,6 +44,8 @@ export default function Dashboard({ email }) {
     { id: 'about', label: 'About', dir: '/about' },
     { id: 'exam', label: 'Exam', dir: '/exam' },
      { id: "testResult", label: "Test Result", dir: "/test_result" },
+          { id: "reviewer", label: "Test Reviewer", dir: "/reviewer" },
+
 
   ];
 
